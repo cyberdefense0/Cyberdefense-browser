@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: http: 'unsafe-inline' 'unsafe-eval' data: blob:;">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cyberdéfense Browser</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              cyber: '#03e9f4',
+              neon: '#8b5cf6',
+              midnight: '#050816',
+              slate: '#111827'
+            }
+          }
+        }
+      }
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="bg-slate-950 text-slate-100 antialiased">
+    <div class="h-full w-full flex flex-col">
+      <header class="flex items-center gap-3 px-5 py-4 border-b border-slate-700 bg-slate-900/90 backdrop-blur flex-shrink-0">
+        <button id="panelToggle" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-cyber text-lg font-bold transition-transform duration-200">◀</button>
+        <div class="flex items-center gap-3">
+          <div class="h-11 w-11 rounded-2xl bg-cyber/20 border border-cyber shadow-glow flex items-center justify-center text-cyber text-xl font-bold">C</div>
+          <div>
+            <p class="text-sm text-slate-400">Cyberdéfense Browser</p>
+            <h1 class="text-2xl font-semibold tracking-wide text-white">Secure Surf</h1>
+          </div>
+        </div>
+        <div class="flex-1 flex gap-2">
+          <button id="backButton" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700">←</button>
+          <button id="forwardButton" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700">→</button>
+          <button id="reloadButton" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700">⟳</button>
+          <input id="addressBar" type="text" placeholder="https://example.com" class="flex-1 rounded-2xl bg-slate-950 border border-slate-700 px-4 py-3 text-slate-100 focus:outline-none focus:border-cyber" />
+          <button id="goButton" class="px-5 py-3 rounded-2xl bg-cyber text-slate-950 font-semibold hover:bg-cyber/90">Go</button>
+          <button id="searchInPageButton" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700" title="Rechercher dans la page">🔍</button>
+        </div>
+      </header>
+
+      <!-- Barre d'onglets -->
+      <div id="tabsBar" class="flex items-center gap-1 px-5 py-2 border-b border-slate-700 bg-slate-900/50 overflow-x-auto flex-shrink-0">
+        <div id="tabsContainer" class="flex gap-1 flex-1"></div>
+        <button id="newTabButton" class="px-3 py-1 rounded-lg bg-cyber/20 hover:bg-cyber/30 border border-cyber/50 text-cyber text-sm font-bold transition-colors">+</button>
+      </div>
+
+      <main id="mainContent" class="main-content flex-1 flex min-h-0 w-full h-full overflow-hidden">
+        <section id="cyberPanel" class="space-y-5 transition-all duration-300 overflow-y-auto min-h-0">
+          <div class="rounded-3xl border border-slate-700 bg-slate-900/90 p-5 shadow-lg shadow-cyber/10">
+            <h2 class="text-xl font-semibold text-white mb-3">Cyber Panel</h2>
+            <div class="mb-4 grid gap-3">
+              <button id="trackerToggle" class="flex items-center justify-between rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 hover:bg-slate-700">
+                <span>Bloqueur de trackers</span>
+                <span id="trackerToggleState" class="text-cyber font-semibold">ON</span>
+              </button>
+              <button id="vpnToggle" class="flex items-center justify-between rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 hover:bg-slate-700">
+                <span>VPN intégré</span>
+                <span id="vpnToggleState" class="text-rose-400 font-semibold">OFF</span>
+              </button>
+              <button id="torToggle" class="flex items-center justify-between rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 hover:bg-slate-700">
+                <span>Routage Tor (Onion)</span>
+                <span id="torToggleState" class="text-rose-400 font-semibold">OFF</span>
+              </button>
+              <button id="fastVpnToggle" class="flex items-center justify-between rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 hover:bg-slate-700">
+                <span>VPN Rapide ⚡</span>
+                <span id="fastVpnToggleState" class="text-rose-400 font-semibold">OFF</span>
+              </button>
+              <button id="adBlockerToggle" class="flex items-center justify-between rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 hover:bg-slate-700">
+                <span>Bloqueur d'annonces</span>
+                <span id="adBlockerToggleState" class="text-cyber font-semibold">ON</span>
+              </button>
+              <button id="dntToggle" class="flex items-center justify-between rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 hover:bg-slate-700">
+                <span>Do Not Track</span>
+                <span id="dntToggleState" class="text-cyber font-semibold">ON</span>
+              </button>
+              <button id="cookieBlockerToggle" class="flex items-center justify-between rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 hover:bg-slate-700">
+                <span>Bloqueur de cookies 🍪</span>
+                <span id="cookieBlockerToggleState" class="text-cyber font-semibold">ON</span>
+              </button>
+              <button id="popupBlockerToggle" class="flex items-center justify-between rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 hover:bg-slate-700">
+                <span>Bloqueur de popups 🚫</span>
+                <span id="popupBlockerToggleState" class="text-cyber font-semibold">ON</span>
+              </button>
+              <button id="securityScanToggle" class="flex items-center justify-between rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 hover:bg-slate-700">
+                <span>Scanner de sécurité 🔍</span>
+                <span id="securityScanToggleState" class="text-cyber font-semibold">ON</span>
+              </button>
+              <button id="readerModeToggle" class="flex items-center justify-between rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 hover:bg-slate-700">
+                <span>Mode Lecture 📖</span>
+                <span id="readerModeToggleState" class="text-rose-400 font-semibold">OFF</span>
+              </button>
+              <button id="tabManagerToggle" class="flex items-center justify-between rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 hover:bg-slate-700">
+                <span>Onglets 📑</span>
+                <span id="tabManagerToggleState" class="text-rose-400 font-semibold">0</span>
+              </button>
+              <button id="cookieInspectorButton" class="w-full rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 text-sm font-semibold hover:bg-slate-700">
+                🍪 Inspecteur de cookies
+              </button>
+              <button id="performanceMonitorButton" class="w-full rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 text-sm font-semibold hover:bg-slate-700">
+                ⚙️ Moniteur de performance
+              </button>
+              <button id="passwordManagerButton" class="w-full rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 text-sm font-semibold hover:bg-slate-700">
+                🔐 Gestionnaire MDP
+              </button>
+              <button id="clearDataButton" class="w-full rounded-2xl border border-slate-700 bg-rose-500/20 px-4 py-3 text-rose-300 text-sm font-semibold hover:bg-rose-500/30">
+                🗑️ Effacer les données
+              </button>
+              <div class="rounded-2xl border border-slate-700 bg-slate-800/60 p-3">
+                <div class="flex items-center justify-between mb-2">
+                  <p class="text-slate-200 text-xs font-medium">Favoris ⭐</p>
+                  <button id="addFavoriteButton" class="text-cyber text-xs hover:text-cyber/80">+ Ajouter</button>
+                </div>
+                <div id="favoritesList" class="space-y-1 max-h-32 overflow-y-auto">
+                  <!-- Les favoris seront ajoutés ici dynamiquement -->
+                </div>
+              </div>
+              <div class="rounded-2xl border border-slate-700 bg-slate-800/60 p-3">
+                <p class="text-slate-200 text-xs font-medium mb-2">Moteur de recherche</p>
+                <select id="searchEngineSelect" class="w-full rounded-xl bg-slate-950 border border-slate-600 px-2 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyber">
+                  <option value="google">Google</option>
+                  <option value="duckduckgo">DuckDuckGo</option>
+                  <option value="brave">Brave Search</option>
+                  <option value="ecosia">Ecosia 🌱</option>
+                </select>
+              </div>
+              <div class="rounded-2xl border border-slate-700 bg-slate-800/60 p-3">
+                <p class="text-slate-200 text-xs font-medium mb-2">Thème</p>
+                <select id="themeSelect" class="w-full rounded-xl bg-slate-950 border border-slate-600 px-2 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyber">
+                  <option value="cyberpunk">Cyberpunk Neon</option>
+                  <option value="dark">Dark Mode</option>
+                  <option value="light">Light Mode</option>
+                  <option value="matrix">Matrix Green</option>
+                  <option value="sunset">Sunset</option>
+                </select>
+              </div>
+              <div class="grid gap-2">
+                <div class="rounded-2xl border border-slate-700 bg-slate-800/60 p-3">
+                  <p class="text-slate-200 text-xs font-medium mb-2">Pays VPN</p>
+                  <select id="vpnCountrySelect" class="w-full rounded-xl bg-slate-950 border border-slate-600 px-2 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyber" disabled>
+                    <option value="France">France</option>
+                    <option value="États-Unis">États-Unis</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Allemagne">Allemagne</option>
+                    <option value="Pays-Bas">Pays-Bas</option>
+                    <option value="Japon">Japon</option>
+                    <option value="Singapour">Singapour</option>
+                    <option value="Brésil">Brésil</option>
+                  </select>
+                </div>
+                <div class="rounded-2xl border border-slate-700 bg-slate-800/60 p-3">
+                  <p class="text-slate-200 text-xs font-medium mb-2">Proxy manuel</p>
+                  <input id="vpnProxyInput" type="text" placeholder="http://host:port" class="w-full rounded-xl bg-slate-950 border border-slate-600 px-2 py-2 mb-2 text-xs text-slate-100 focus:outline-none focus:border-cyber" />
+                  <button id="vpnProxyApply" class="w-full rounded-xl bg-cyber px-2 py-2 text-xs text-slate-950 font-semibold hover:bg-cyber/90">Appliquer</button>
+                </div>
+              </div>
+            </div>
+            <div class="space-y-4">
+              <div class="panel-row">
+                <span>Sécurité HTTPS</span>
+                <span id="httpsStatus" class="text-cyber font-semibold">—</span>
+              </div>
+              <div class="panel-row">
+                <span>Trackers détectés</span>
+                <span id="trackerCount" class="text-neon font-semibold">0</span>
+              </div>
+              <div class="panel-row">
+                <span>VPN</span>
+                <span id="vpnStatus" class="text-rose-400 font-semibold">Désactivé</span>
+              </div>
+              <div class="panel-row">
+                <span>Tor (Onion)</span>
+                <span id="torStatus" class="text-rose-400 font-semibold">Désactivé</span>
+              </div>
+              <div class="panel-row">
+                <span>VPN Rapide</span>
+                <span id="fastVpnStatus" class="text-rose-400 font-semibold">Désactivé</span>
+              </div>
+              <div class="panel-row">
+                <span>Note VPN</span>
+                <span id="vpnNote" class="text-slate-400">Mode simulation</span>
+              </div>
+              <div class="panel-row">
+                <span>Pays du serveur</span>
+                <span id="serverCountry" class="text-cyber font-semibold">—</span>
+              </div>
+              <div class="panel-row">
+                <span>Technologies</span>
+                <span id="techStack" class="text-slate-300">n/a</span>
+              </div>
+              <div class="panel-row">
+                <span>Score sécurité</span>
+                <span id="domainScore" class="text-cyber font-semibold">—</span>
+              </div>
+              <div class="panel-row">
+                <span>Grade sécurité</span>
+                <span id="securityGrade" class="text-cyber font-semibold">—</span>
+              </div>
+              <div class="rounded-2xl border border-slate-700 bg-slate-800/60 p-3">
+                <p class="text-slate-200 text-xs font-medium mb-2">Détails sécurité</p>
+                <div id="securityDetails" class="text-xs text-slate-300 space-y-1 max-h-32 overflow-y-auto">
+                  <div>Chargement en cours...</div>
+                </div>
+              </div>
+              <div class="panel-row">
+                <span>Réputation domaine</span>
+                <span id="domainReputation" class="text-cyber font-semibold">0/100</span>
+              </div>
+              <div class="panel-row">
+                <span>Bloqueur annonces</span>
+                <span id="adBlockerStatus" class="text-cyber font-semibold">Activé</span>
+              </div>
+              <div class="panel-row">
+                <span>Do Not Track</span>
+                <span id="dntStatus" class="text-cyber font-semibold">Activé</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-lg border border-slate-700 bg-slate-900/90 p-2 shadow-lg shadow-neon/10 h-[100px] overflow-auto">
+            <div class="flex items-center justify-between mb-1">
+              <h2 class="text-xs font-semibold">Console</h2>
+              <span class="text-slate-400 text-xs">status</span>
+            </div>
+            <div id="consoleLog" class="text-slate-300 text-xs leading-4 space-y-1"></div>
+          </div>
+        </section>
+
+        <section class="flex-1 relative min-h-0 w-full flex flex-col rounded-lg border border-slate-700 bg-slate-950 overflow-hidden">
+          <div class="flex items-center justify-between gap-2 border-b border-slate-700 px-2 py-1 bg-slate-900/80 text-xs flex-shrink-0">
+            <div class="flex items-center gap-1">
+              <div class="h-2 w-2 rounded-full bg-rose-400"></div>
+              <div class="h-2 w-2 rounded-full bg-amber-400"></div>
+              <div class="h-2 w-2 rounded-full bg-cyber"></div>
+            </div>
+            <div id="currentTabTitle" class="text-slate-400 flex-1 text-center">Nouvel onglet</div>
+            <div class="text-slate-400 text-xs">Navigation secure</div>
+          </div>
+          <div id="webviewsContainer" class="wiki-container flex-1 relative min-h-0 w-full overflow-hidden">
+            <!-- Les webviews seront créés dynamiquement ici -->
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>
