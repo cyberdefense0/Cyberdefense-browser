@@ -1,0 +1,60 @@
+{
+  "name": "cyberdefense-browser",
+  "version": "1.1.0",
+  "description": "Cyberdéfense Browser prototype with secure webview and cyber UI",
+  "main": "main.js",
+  "author": {
+    "name": "Cyberdéfense",
+    "email": "cyberdefense@example.com"
+  },
+  "homepage": "https://example.com",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "build-linux": "electron-builder --linux",
+    "build-win": "electron-builder --win",
+    "build-all": "electron-builder --linux --win",
+    "publish": "electron-builder --publish always"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.3"
+  },
+  "devDependencies": {
+    "electron": "^42.1.0",
+    "electron-builder": "^26.8.1"
+  },
+  "build": {
+    "appId": "com.cyberdefense.browser",
+    "productName": "CyberDefense Browser",
+    "directories": {
+      "buildResources": "build"
+    },
+    "icon": "build/icon",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "your-username",
+        "repo": "cybersecurity-browser"
+      }
+    ],
+    "linux": {
+      "target": [
+        "deb"
+      ],
+      "category": "Network",
+      "maintainer": "Cyberdéfense <cyberdefense@example.com>"
+    },
+    "win": {
+      "target": [
+        "portable",
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
