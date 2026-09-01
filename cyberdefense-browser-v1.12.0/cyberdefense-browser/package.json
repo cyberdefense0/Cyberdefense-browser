@@ -1,0 +1,15 @@
+{
+  "name": "cyberdefense-browser",
+  "version": "1.12.0",
+  "description": "Cyberdéfense Browser prototype with secure webview, cyber UI, reader mode, per-domain security tracking, onboarding, real-time tracker/ad blocking stats, real download manager, screenshot capture (+clipboard), advanced password generator, blue-light filter, real technology detection, favorites export/import (JSON+HTML), history search, unpacked extension support, configurable download folder, verified proxy connectivity, realistic user agent and forwarded keyboard shortcuts",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-packager . CyberdefenseBrowser --platform=linux --arch=x64 --overwrite"
+  },
+  "author": "Cyberdéfense",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^42.1.0"
+  }
+}
